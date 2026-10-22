@@ -1,0 +1,16 @@
+work/
+outbox/
+**/bin/
+**/obj/
+vendor/
+inbox/
+.agents/
+.claude/
+AGENTS.md
+CLAUDE.md
+MEMORY.md
+*.log
+*.user
+*.pfx
+*.key
+.env*

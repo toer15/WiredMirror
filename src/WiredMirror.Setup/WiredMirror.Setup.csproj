@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier><AssemblyName>WiredMirror.Setup</AssemblyName>
+    <PublishSingleFile>true</PublishSingleFile><SelfContained>false</SelfContained><DebugType>embedded</DebugType>
+    <Upstream>../../vendor/iPhoneMirror/src/DriverInstaller</Upstream>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(Upstream)/Services/AppleSupportInstaller.cs;$(Upstream)/Services/AppleSoftwareUpdateCatalog.cs;$(Upstream)/Services/AppleDeviceMetadataReader.cs;$(Upstream)/Services/AppleProductNames.cs;$(Upstream)/Services/DeviceCatalog.cs;$(Upstream)/Services/DriverConstants.cs;$(Upstream)/Services/DriverLogger.cs;$(Upstream)/Services/DriverOperationClient.cs;$(Upstream)/Services/DriverPayload.cs;$(Upstream)/Services/ElevatedDriverHost.cs;$(Upstream)/Models/DriverModels.cs" />
+    <Compile Include="$(Upstream)/../Shared/Networking/SegmentedHttpDownloader.cs;$(Upstream)/../Shared/Security/ElevationPathLock.cs" />
+    <EmbeddedResource Include="$(Upstream)/Localization/Strings.en-US.xaml" LogicalName="Setup.Strings.xml" WithCulture="false" />
+    <EmbeddedResource Include="$(Upstream)/Assets/libusb-win32-1.2.6.0/amd64/install-filter.exe" LogicalName="DriverPayload.amd64.install-filter.exe" />
+    <EmbeddedResource Include="$(Upstream)/Assets/libusb-win32-1.2.6.0/amd64/libusb0.sys" LogicalName="DriverPayload.amd64.libusb0.sys" />
+    <EmbeddedResource Include="$(Upstream)/Assets/libusb-win32-1.2.6.0/amd64/libusb0.dll" LogicalName="DriverPayload.amd64.libusb0.dll" />
+    <EmbeddedResource Include="$(Upstream)/Assets/libusb-win32-1.2.6.0/x86/libusb0_x86.dll" LogicalName="DriverPayload.x86.libusb0_x86.dll" />
+  </ItemGroup>
+</Project>
