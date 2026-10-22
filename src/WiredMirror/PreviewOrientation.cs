@@ -21,6 +21,20 @@ internal static class OrientationPolicy
         var fitted = new Size(Math.Max(1, (int)(width * scale)), Math.Max(1, (int)(height * scale)));
         return new Rectangle((canvas.Width - fitted.Width) / 2, (canvas.Height - fitted.Height) / 2, fitted.Width, fitted.Height);
     }
+
+    public static void Draw(Graphics graphics, Size canvas, Bitmap frame, PreviewOrientation mode)
+    {
+        var turns = Turns(mode, frame.Width, frame.Height);
+        var rectangle = Fit(canvas, frame.Size, turns);
+        if (rectangle.IsEmpty) return;
+        var state = graphics.Save();
+        graphics.TranslateTransform(rectangle.Left + rectangle.Width / 2f, rectangle.Top + rectangle.Height / 2f);
+        graphics.RotateTransform(turns * 90);
+        var width = (turns & 1) != 0 ? rectangle.Height : rectangle.Width;
+        var height = (turns & 1) != 0 ? rectangle.Width : rectangle.Height;
+        graphics.DrawImage(frame, new RectangleF(-width / 2f, -height / 2f, width, height));
+        graphics.Restore(state);
+    }
 }
 
 // Reuses two BGRA buffers and reads only the latest native frame. No frame queue.
@@ -86,15 +100,7 @@ internal sealed class OrientedPreview : Control
     {
         e.Graphics.Clear(Color.Black);
         if (front == null) return;
-        var turns = OrientationPolicy.Turns(orientation, front.Width, front.Height);
-        var rectangle = OrientationPolicy.Fit(ClientSize, front.Size, turns);
-        var state = e.Graphics.Save();
-        e.Graphics.TranslateTransform(rectangle.Left + rectangle.Width / 2f, rectangle.Top + rectangle.Height / 2f);
-        e.Graphics.RotateTransform(turns * 90);
-        var width = (turns & 1) != 0 ? rectangle.Height : rectangle.Width;
-        var height = (turns & 1) != 0 ? rectangle.Width : rectangle.Height;
-        e.Graphics.DrawImage(front, new RectangleF(-width / 2f, -height / 2f, width, height));
-        e.Graphics.Restore(state);
+        OrientationPolicy.Draw(e.Graphics, ClientSize, front, orientation);
     }
 
     public async Task Shutdown()

@@ -226,6 +226,28 @@ Test("Rotated fullscreen fitting preserves aspect and stays within the canvas", 
     Assert(OrientationPolicy.Fit(new(0, 0), new(1080, 1920), 0).IsEmpty);
     Assert(Marshal.SizeOf<VideoFrameInfo>() == 32);
 });
+Test("Landscape preview actually rotates colored frame corners clockwise", () =>
+{
+    using var source = new System.Drawing.Bitmap(20, 40);
+    using (var graphics = System.Drawing.Graphics.FromImage(source))
+    {
+        graphics.FillRectangle(System.Drawing.Brushes.Red, 0, 0, 10, 20);
+        graphics.FillRectangle(System.Drawing.Brushes.Green, 10, 0, 10, 20);
+        graphics.FillRectangle(System.Drawing.Brushes.Blue, 0, 20, 10, 20);
+        graphics.FillRectangle(System.Drawing.Brushes.Yellow, 10, 20, 10, 20);
+    }
+    using var output = new System.Drawing.Bitmap(80, 40);
+    using (var graphics = System.Drawing.Graphics.FromImage(output))
+        OrientationPolicy.Draw(graphics, output.Size, source, PreviewOrientation.Landscape);
+    Assert(output.GetPixel(10, 10).ToArgb() == System.Drawing.Color.Blue.ToArgb());
+    Assert(output.GetPixel(70, 10).ToArgb() == System.Drawing.Color.Red.ToArgb());
+    Assert(output.GetPixel(10, 30).ToArgb() == System.Drawing.Color.Yellow.ToArgb());
+    Assert(output.GetPixel(70, 30).ToArgb() == System.Drawing.Color.Green.ToArgb());
+    using (var graphics = System.Drawing.Graphics.FromImage(output))
+        OrientationPolicy.Draw(graphics, output.Size, source, PreviewOrientation.LandscapeReverse);
+    Assert(output.GetPixel(10, 10).ToArgb() == System.Drawing.Color.Green.ToArgb());
+    Assert(output.GetPixel(70, 30).ToArgb() == System.Drawing.Color.Blue.ToArgb());
+});
 Test("Update checks accept only a newer complete stable release", () =>
 {
     Assert(UpdateClient.Parse(ReleaseJson("v0.5.0"))?.Version == new Version(0, 5, 0));

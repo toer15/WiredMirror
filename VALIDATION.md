@@ -2,7 +2,7 @@
 
 The app targets .NET 8 on Windows x64. Packaging retains the hash-pinned iPhoneMirror v1.8.3 engine and its GPL corresponding source.
 
-44 automated checks pass, covering exact phone selection, Trust/readiness, list changes, setup readiness, teardown failures, reconnection, AirPlay identity, Bluetooth source restrictions, portrait/landscape fitting, stable-release selection, update URL/digest validation, archive traversal rejection, replacement and rollback preserving the previous installation and extra files.
+45 automated checks cover exact phone selection, Trust/readiness, list changes, setup readiness, teardown failures, reconnection, AirPlay identity, Bluetooth source restrictions, portrait/landscape fitting and actual corner rendering, stable-release selection, update URL/digest validation, archive traversal rejection, replacement and rollback preserving the previous installation and extra files.
 
 Native smoke checks load the bundled engine, inspect USB setup, verify exports and attach/detach the preview. The wireless check starts the bundled host and requires readiness. These checks do not fabricate phone frames.
 
